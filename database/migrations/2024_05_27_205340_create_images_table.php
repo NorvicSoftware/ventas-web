@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('dni', 15)->unique();
-            $table->string('full_name', 75);
-            $table->string('cell_phone', 18)->nullable();
-            $table->text('address')->nullable();
+            $table->string('url', 250);
+            $table->morphs('imageable');//imageable_id, imageable_type
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('images');
     }
 };
