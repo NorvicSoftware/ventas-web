@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 75);
-            $table->decimal('sale_price', 8,2);//precio de venta 100.50 60.00
-            $table->integer('quantity')->default(0);// 0
-            $table->enum('status', ['Activo', 'Descontinuado'])->default('Activo');
+            $table->string('name',75);
+            $table->decimal('sale_price',8,2);
+            $table->integer('quantity')->default(0);
+            $table->enum('status',['Activo'],['Descontinuado'])->default('Activo');
 
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
