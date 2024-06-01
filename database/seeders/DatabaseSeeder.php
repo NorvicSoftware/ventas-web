@@ -25,9 +25,9 @@ class DatabaseSeeder extends Seeder
         Client::factory(20)->create();
         $sales = Sale::factory(10)->create();
 
-        $products->each(function ($product) use ($sale)){
-            $product->
-        }
+        $products->each(function ($product) use ($sales){
+            $product->sales()->attach($sales->random()->id, ['sale_price' => 10, 'quantity' => 2]);
+        });
 
         // User::factory(10)->create();
 

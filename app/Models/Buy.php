@@ -12,7 +12,7 @@ class Buy extends Model
     use HasFactory;
     protected $table = "buys";
 
-    public function products():BelongsToMany
+    public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class);
     }
@@ -20,5 +20,10 @@ class Buy extends Model
     public function provider(): BelongsTo
     {
         return $this->belongsTo(Provider::class);
+    }
+
+    public function user() : BelongsTo 
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Seeder;
 
 class Product extends Model
 {
@@ -21,5 +20,15 @@ class Product extends Model
     public function buys(): BelongsToMany
     {
         return $this->belongsToMany(Buy::class);
+    }
+
+    public function imagen() : MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function sales(): BelongsToMany
+    {
+        return $this->belongsToMany(Sale::class);
     }
 }
