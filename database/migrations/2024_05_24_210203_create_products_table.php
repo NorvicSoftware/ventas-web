@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('quantity')->default(0);
             $table->enum('status', ['Activo', 'Descontinuado'])->default('Activo');
 
-            $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete("cascade");
 
             $table->timestamps();
         });
