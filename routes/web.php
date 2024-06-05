@@ -5,6 +5,7 @@ use App\Models\Category;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -33,5 +34,35 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/categories', 'index');
+    Route::get('/categories', 'create');
+    Route::post('/categories/store', 'store');
+    Route::get('/categories/show/{id}', 'show');
+    Route::get('/categories/edit/{id}', 'edit');
+    Route::put('/categories/update/{id}', 'update');
+    Route::delete('/categories/delete/{id}', 'destroy');
+});
+
+
+
+
+
+
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/categories', 'index');
+    Route::get('/categories', 'create');
+    Route::post('/categories/store', 'store');
+    Route::get('/categories/show/{id}', 'show');
+    Route::get('/categories/edit/{id}', 'edit');
+    Route::put('/categories/update/{id}', 'update');
+    Route::delete('/categories/delete/{id}', 'destroy');
+});
+
+
+
+
+
 
 require __DIR__ . '/auth.php';
