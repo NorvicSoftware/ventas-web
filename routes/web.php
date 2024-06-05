@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\BuyController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Category;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\SaleController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -45,7 +49,45 @@ Route::controller(CategoryController::class)->group(function () {
     Route::delete('/categories/delete/{id}', 'destroy');
 });
 
+Route::controller(ProviderController::class)->group(function () {
+    Route::get('/providers', 'index');
+    Route::get('/providers/create', 'create');
+    Route::post('/providers', 'store');
+    Route::get('/providers/{id}', 'show');
+    Route::get('/providers/{id}/edit', 'edit');
+    Route::put('/providers/{id}', 'update');
+    Route::delete('/providers/{id}', 'destroy');
+});
 
+Route::controller(BuyController::class)->group(function () {
+    Route::get('/buys', 'index');
+    Route::get('/buys/create', 'create');
+    Route::post('/buys', 'store');
+    Route::get('/buys/{id}', 'show');
+    Route::get('/buys/{id}/edit', 'edit');
+    Route::put('/buys/{id}', 'update');
+    Route::delete('/buys/{id}', 'destroy');
+});
+
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/clients', 'index');
+    Route::get('/clients/create', 'create');
+    Route::post('/clients', 'store');
+    Route::get('/clients/{id}', 'show');
+    Route::get('/clients/{id}/edit', 'edit');
+    Route::put('/clients/{id}', 'update');
+    Route::delete('/clients/{id}', 'destroy');
+});
+
+Route::controller(SaleController::class)->group(function () {
+    Route::get('/sales', 'index');
+    Route::get('/sales/create', 'create');
+    Route::post('/sales', 'store');
+    Route::get('/sales/{id}', 'show');
+    Route::get('/sales/{id}/edit', 'edit');
+    Route::put('/sales/{id}', 'update');
+    Route::delete('/sales/{id}', 'destroy');
+});
 
 
 
