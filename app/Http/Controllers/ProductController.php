@@ -33,14 +33,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = new Product();
-        $product->name = $request->name;
-        $product->sale_price = $request->sale_price;
-        $product->quantity = $request->quantity;
-        $product->status = $request->status;
-        $product->category_id = $request->category_id;
-        $product->save();
 
+        $product = new Product($request->all());
+        $product->save();
+        if($request->hasFile('image')){
+            $image_path = 'public/images';
+            $image = $request->file('image');
+            $name_image = time() . "-" . $image->getClientOriginalName();
+            $request->file('image')->storeAs($image_path, $name_image);
+
+            $product->image()->create(['url' => $name_image]);
+        }
         return Redirect::route('products.index');
     }
 
@@ -75,6 +78,15 @@ class ProductController extends Controller
         $product->status = $request->status;
         $product->category_id = $request->category_id;
         $product->save();
+
+        if($request->hasFile('image')){
+            $image_path = 'public/images';
+            $image = $request->file('image');
+            $name_image = time() . "-" . $image->getClientOriginalName();
+            $request->file('image')->storeAs($image_path, $name_image);
+
+            $product->image()->update(['url' => $name_image]);
+        }
 
         return Redirect::route('products.index');
     }
