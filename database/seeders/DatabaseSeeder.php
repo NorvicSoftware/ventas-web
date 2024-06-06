@@ -25,15 +25,17 @@ class DatabaseSeeder extends Seeder
         Client::factory(20)->create();
         $sales = Sale::factory(10)->create();
 
-        $products->each(function ($product) use ($sales){
+        $products->each(function ($product) use ($sales) {
             $product->sales()->attach($sales->random()->id, ['sale_price' => 10, 'quantity' => 2]);
         });
 
         // User::factory(10)->create();
 
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
+        $this->call(ProviderSeeder::class);
+
+        /* User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]); */
     }
 }
