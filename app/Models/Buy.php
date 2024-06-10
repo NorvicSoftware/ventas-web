@@ -11,6 +11,7 @@ class Buy extends Model
 {
     use HasFactory;
     protected $table = "buys";
+    protected $fillable = ['buy_date', 'provider_id', 'user_id'];
 
     public function products(): BelongsToMany
     {
@@ -22,7 +23,7 @@ class Buy extends Model
         return $this->belongsTo(Provider::class);
     }
 
-    public function user() : BelongsTo 
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

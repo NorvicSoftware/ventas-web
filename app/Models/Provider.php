@@ -11,13 +11,14 @@ class Provider extends Model
 {
     use HasFactory;
     protected $table = "providers";
+    protected $fillable = ['company', 'contact', 'cell_phone', 'address', 'email'];
 
     public function buys(): HasMany
     {
         return $this->hasMany(Buy::class);
     }
 
-    public function imagen() : MorphOne 
+    public function imagen(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }
