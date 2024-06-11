@@ -44,10 +44,10 @@ Route::middleware('auth')->group(function() {
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/categories', 'index')->name('categories.index');
         Route::get('/categories/create', 'create');
-        Route::post('/categories/store', 'store');
+        Route::post('/categories/store', 'store')->name('categories.store');
         Route::get('/categories/show/{id}', 'show');
         Route::get('/categories/edit/{id}', 'edit');
-        Route::put('/categories/update/{id}', 'update');
+        Route::put('/categories/update/{id}', 'update')->name('categories.update');
         Route::delete('/categories/delete/{id}', 'destroy');
     });
     
