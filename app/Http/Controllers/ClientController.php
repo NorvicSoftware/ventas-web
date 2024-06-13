@@ -31,6 +31,10 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'dni' => 'required',
+            'full_name' => 'required',
+        ]);
         $client = new Client();
         $client->dni = $request->dni;
         $client->full_name = $request->full_name;
