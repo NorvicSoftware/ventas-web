@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function() {
     
     
     Route::controller(ProviderController::class)->group(function () {
-        Route::get('/providers', 'index');
+        Route::get('/providers', 'index')->name('provides.index');
         Route::get('/providers/create', 'create');
         Route::post('/providers', 'store');
         Route::get('/providers/{id}', 'show');
