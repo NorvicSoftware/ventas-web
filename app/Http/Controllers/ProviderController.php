@@ -31,6 +31,12 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'company' => 'required|min:3|max:35',
+            'contact' => 'required|min:3|max:75',
+            'cell_phone' => 'nullable|min:5|max:18',
+        ]);
+
         $provider = new Provider();
         $provider->company = $request->company;
         $provider->contact = $request->contact;
@@ -65,6 +71,11 @@ class ProviderController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'company' => 'required|min:3|max:35',
+            'contact' => 'required|min:3|max:75',
+        ]);
+        
         $provider = Provider::find($id);
         $provider->company = $request->company;
         $provider->contact = $request->contact;

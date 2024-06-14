@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(ProductController::class)->group(function () {
-        Route::get('/products', 'index');
+        Route::get('/products', 'index')->name('products.index');
         Route::get('/products/create', 'create');
         Route::post('/products/store', 'store');
         Route::get('/products/show/{id}', 'show');
@@ -53,12 +53,12 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(ProviderController::class)->group(function () {
-        Route::get('/providers', 'index')->name('provides.index');
+        Route::get('/providers', 'index')->name('providers.index');
         Route::get('/providers/create', 'create');
-        Route::post('/providers', 'store');
+        Route::post('/providers', 'store')->name('providers.store');
         Route::get('/providers/{id}', 'show');
         Route::get('/providers/{id}/edit', 'edit');
-        Route::put('/providers/{id}', 'update');
+        Route::put('/providers/{id}', 'update')->name('providers.update');
         Route::delete('/providers/{id}', 'destroy');
     });
 

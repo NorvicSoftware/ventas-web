@@ -4,7 +4,6 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
-import TextInput from "@/Components/TextInput";
 
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -40,8 +39,8 @@ export default function Authenticated({ user, header, children }) {
                             </div>
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route("provides.index")}
-                                    active={route().current("provides.index")}
+                                    href={route("providers.index")}
+                                    active={route().current("providers.index")}
                                 >
                                     Proveedores
                                 </NavLink>
@@ -52,6 +51,14 @@ export default function Authenticated({ user, header, children }) {
                                     active={route().current("clients.index")}
                                 >
                                     Clientes
+                                </NavLink>
+                            </div>
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink
+                                    href={route("products.index")}
+                                    active={route().current("products.index")}
+                                >
+                                    Productos
                                 </NavLink>
                             </div>
                         </div>
@@ -168,8 +175,8 @@ export default function Authenticated({ user, header, children }) {
                     </div>
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            href={route("provides.index")}
-                            active={route().current("provides.index")}
+                            href={route("providers.index")}
+                            active={route().current("providers.index")}
                         >
                             Proveedores
                         </ResponsiveNavLink>
@@ -209,23 +216,10 @@ export default function Authenticated({ user, header, children }) {
                 </div>
             </nav>
 
-            {/* {header && (
+            {header && (
                 <header className="bg-white dark:bg-gray-800 shadow">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {header}
-                    </div>
-                </header>
-            )} */}
-            {header && (
-                <header className="bg-white dark:bg-gray-800 shadow text-gray-800 dark:text-gray-200">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between items-center">
-                            {header}
-                            <div className="flex gap-4">
-                                <TextInput></TextInput>
-                                <button>Agregar</button>
-                            </div>
-                        </div>
                     </div>
                 </header>
             )}
