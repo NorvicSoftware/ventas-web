@@ -1,12 +1,12 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { usePage } from "@inertiajs/react";
 import { useState } from "react";
-// import Form from "./Form";
+import Form from "./Form";
 import TextInput from "@/Components/TextInput";
 
 export default function Index({ auth }) {
 
-    const { products } = usePage().props;
+    const { products, categories } = usePage().props;
     const [searchProduct, setSearchProduct] = useState('');
     console.log(products);
 
@@ -23,7 +23,7 @@ export default function Index({ auth }) {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <div className=" flex justify-between items-center pb-2">
                                 <TextInput isFocused={true} type="text" name="search" placeholder="Buscar..." onChange={(event) => setSearchProduct(event.target.value)} />
-                                {/* <Form /> */}
+                                <Form categories={categories}/>
                             </div>
                             <div>
                                 <table className="min-w-full">
@@ -44,9 +44,9 @@ export default function Index({ auth }) {
                                                 <td className="py-2 px-3 border border-gray-300">{product.sale_price}</td>
                                                 <td className="py-2 px-3 border border-gray-300">{product.quantity}</td>
                                                 <td className="py-2 px-3 border border-gray-300">{product.status}</td>
-                                                <td className="py-2 px-3 border border-gray-300">{product.category_name}</td>
+                                                <td className="py-2 px-3 border border-gray-300">{product.category.name}</td>
                                                 <td className="py-2 px-3 border border-gray-300">
-                                                    {/* <Form id={product.id} product={product} /> */}
+                                                    <Form id={product.id} product={product} categories={categories}/>
                                                 </td>
                                             </tr>
                                         ))}

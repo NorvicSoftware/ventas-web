@@ -9,7 +9,9 @@ export default function Form({ id = 0, client = {} }) {
         full_name: !client ? "" : client.full_name,
         cell_phone: !client ? "" : client.cell_phone,
         address: !client ? "" : client.address,
+        email: !client ? "" : client.email,
     });
+
     function openModal() {
         setShowModal(true);
     }
@@ -21,6 +23,7 @@ export default function Form({ id = 0, client = {} }) {
     }
 
     const submitCliente = (e) => {
+        e.preventDefault();
         console.log(data);
         if (id === 0) {
             post(route("clients.store"), {
@@ -75,6 +78,7 @@ export default function Form({ id = 0, client = {} }) {
                             setData("full_name", e.target.value);
                         }}
                     />
+                    {errors.full_name && <p>{errors.full_name}</p>}
                     <label htmlFor="cell_phone">Celular</label>
                     <input
                         type="number"
@@ -91,6 +95,15 @@ export default function Form({ id = 0, client = {} }) {
                         value={data.address}
                         onChange={(e) => {
                             setData("address", e.target.value);
+                        }}
+                    />
+                    <label htmlFor="email">Correo electronico</label>
+                    <input
+                        type="text"
+                        name="email"
+                        value={data.email}
+                        onChange={(e) => {
+                            setData("email", e.target.value);
                         }}
                     />
                     <button onClick={closeModal}>Cancelar</button>

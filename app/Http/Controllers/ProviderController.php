@@ -6,6 +6,8 @@ use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProviderMail;
 
 class ProviderController extends Controller
 {
@@ -83,6 +85,11 @@ class ProviderController extends Controller
         $provider->address = $request->address;
         $provider->email = $request->email;
         $provider->save();
+
+        if($provider->email !== ''){
+            Mail::to($provider->email)->send(new ProviderMail($provider));
+        }
+        
 
         return Redirect::route('providers.index');
     }
