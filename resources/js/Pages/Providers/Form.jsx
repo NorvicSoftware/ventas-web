@@ -53,7 +53,6 @@ export default function Form({ id = 0, provider={} }) {
                 onError: (error) => console.log('error: ', error)
             })
         }
-
     }
 
     return (
@@ -64,7 +63,6 @@ export default function Form({ id = 0, provider={} }) {
                 ) : (
                     <button onClick={openModal}><HiMiniPencilSquare className="w-6 h-6" /></button>
                 )}
-
             </div>
             <Modal show={showModal} closeable={true} onClose={closeModal}>
                 <div className="p-4">
@@ -95,12 +93,15 @@ export default function Form({ id = 0, provider={} }) {
                             )}
                         </div>
                         <div>
-                            <InputLabel value="Dirección" />
-                            <TextInput className=" block w-full mb-2" type="text" name="address" placeholder="Dirección" maxLength={250} value={data.address} onChange={(e) => setData('address', e.target.value)} />
+                            <InputLabel value="Correo electrónico" />
+                            <TextInput className=" block w-full mb-2" type="text" name="email" placeholder="Correo electrónico" maxLength={75} value={data.email} onChange={(e) => setData('email', e.target.value)} />
+                            {errors.email && (
+                                <InputError message={errors.email}></InputError>
+                            )}
                         </div>
                         <div>
-                            <InputLabel value="Correo electronico" />
-                            <TextInput className=" block w-full mb-2" type="text" name="email" placeholder="Correo electronico" maxLength={75} value={data.email} onChange={(e) => setData('email', e.target.value)} />
+                            <InputLabel value="Dirección" />
+                            <TextInput className=" block w-full mb-2" type="text" name="address" placeholder="Dirección" maxLength={250} value={data.address} onChange={(e) => setData('address', e.target.value)} />
                         </div>
                         <div className=" space-x-2 flex justify-end">
                             <SecondaryButton type="button" onClick={closeModal}>Cancelar</SecondaryButton>

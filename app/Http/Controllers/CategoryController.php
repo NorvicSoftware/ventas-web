@@ -67,7 +67,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $category = Category::find($id);
+        $request->validate([
+            'name' => 'required'
+        ]);
+        
+        $category = Category::findOrFail($id);
         $category->name = $request->name;
         $category->description = $request->description;
         $category->save();
@@ -81,7 +85,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::find($id);
+        $category = Category::findOrFail($id);
         $category->delete();
 
         return Redirect::route('categories.index');

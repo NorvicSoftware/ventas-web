@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ProviderMail;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class ProviderController extends Controller
 {
@@ -37,17 +39,25 @@ class ProviderController extends Controller
             'company' => 'required|min:3|max:35',
             'contact' => 'required|min:3|max:75',
             'cell_phone' => 'nullable|min:5|max:18',
+            'email' => 'nullable|email',
         ]);
 
-        $provider = new Provider();
-        $provider->company = $request->company;
-        $provider->contact = $request->contact;
-        $provider->cell_phone = $request->cell_phone;
-        $provider->address = $request->address;
-        $provider->email = $request->email;
-        $provider->save();
+        DB::beginTransaction();
+        try {
+            $provider = new Provider();
+            $provider->company = $request->company;
+            $provider->contact = $request->contact;
+            $provider->cell_phone = $request->cell_phone;
+            $provider->address = $request->address;
+            $provider->email = $request->email;
+            $provider->save();
 
-        return Redirect::route('providers.index');
+            DB::commit();
+            return Redirect::route('providers.index');
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('providers.index');
+        }
     }
 
     /**
@@ -76,22 +86,30 @@ class ProviderController extends Controller
         $request->validate([
             'company' => 'required|min:3|max:35',
             'contact' => 'required|min:3|max:75',
+            'cell_phone' => 'nullable|min:5|max:18',
+            'email' => 'nullable|email',
         ]);
-        
-        $provider = Provider::find($id);
-        $provider->company = $request->company;
-        $provider->contact = $request->contact;
-        $provider->cell_phone = $request->cell_phone;
-        $provider->address = $request->address;
-        $provider->email = $request->email;
-        $provider->save();
 
-        if($provider->email !== ''){
-            Mail::to($provider->email)->send(new ProviderMail($provider));
+        DB::beginTransaction();
+        try {
+            $provider = Provider::find($id);
+            $provider->company = $request->company;
+            $provider->contact = $request->contact;
+            $provider->cell_phone = $request->cell_phone;
+            $provider->address = $request->address;
+            $provider->email = $request->email;
+            $provider->save();
+
+            if ($provider->email !== '') {
+                Mail::to($provider->email)->send(new ProviderMail($provider));
+            }
+
+            DB::commit();
+            return Redirect::route('providers.index');
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('providers.index');
         }
-        
-
-        return Redirect::route('providers.index');
     }
 
     /**

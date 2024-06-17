@@ -271,5 +271,8 @@ return [
         'username'                 => 'usuario',
         'value'                    => 'valor',
         'year'                     => 'año',
+        'company'                  => 'Empresa',
+        'contact'                  => 'Contacto',
+        'cell_phone'               => 'Celular',
     ],
 ];

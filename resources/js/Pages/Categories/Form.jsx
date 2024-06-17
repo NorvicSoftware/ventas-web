@@ -59,34 +59,34 @@ export default function Form({ id = 0, category = {} }) {
             <div>
                 {id === 0 ? (
                     <CreateButton type='button' onClick={openModal}>Crear nueva Categoria</CreateButton>
-                    // <button onClick={openModal} className=" bg-blue-500">Crear nueva Categoria</button>
                 ) : (
                     <button onClick={openModal}><HiMiniPencilSquare className="w-6 h-6" /></button>
                 )}
-
             </div>
             <Modal show={showModal} closeable={true} onClose={closeModal}>
                 <div className="p-4">
                     <div className=" flex justify-between pb-4">
-                        <h2 className=" font-semibold ">CREAR NUEVA CATEGORIA</h2>
+                        <h2 className=" font-semibold ">{id === 0 ? "CREAR NUEVA CATEGORIA" : "EDITAR CATEGORIA"}</h2>
                         <button type="button" onClick={closeModal} className=" bg-gray-300 hover:bg-gray-400 px-2"><HiXMark /></button>
                     </div>
                     <form>
-                        <InputLabel value="Nombre categoria" />
-                        <TextInput className=" block w-full mb-2" type="text" name="name" value={data.name} onChange={(e) => setData('name', e.target.value)} />
-                        {errors.name && (
-                            <InputError message={errors.name}></InputError>
-                        )}
-                        <InputLabel value="Descripción categoria" />
-                        <TextInput className=" block w-full mb-2" type="text" name="description" value={data.description} onChange={(e) => setData('description', e.target.value)} />
+                        <div>
+                            <InputLabel value="Nombre categoria" />
+                            <TextInput className=" block w-full mb-2" type="text" name="name" maxLength={35} value={data.name} onChange={(e) => setData('name', e.target.value)} />
+                            {errors.name && (
+                                <InputError message={errors.name}></InputError>
+                            )}
+                        </div>
+                        <div>
+                            <InputLabel value="Descripción categoria" />
+                            <TextInput className=" block w-full mb-2" type="text" name="description" maxLength={75} value={data.description} onChange={(e) => setData('description', e.target.value)} />
+                        </div>
                         <div className=" space-x-2 flex justify-end">
                             <SecondaryButton type="button" onClick={closeModal}>Cancelar</SecondaryButton>
                             <PrimaryButton onClick={submitCategory}>Guardar</PrimaryButton>
                         </div>
-
                     </form>
                 </div>
-
             </Modal>
         </div>
 

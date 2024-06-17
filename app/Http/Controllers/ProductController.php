@@ -28,8 +28,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-    //     $categories = Category::all();
-    //     return Inertia::render('Products/Create', ['categories' => $categories]);
+        $categories = Category::all();
+        return Inertia::render('Products/Create', ['categories' => $categories]);
     }
 
     /**
@@ -43,30 +43,24 @@ class ProductController extends Controller
             'status' => 'required'
         ]);
         DB::beginTransaction();
-        try{
+        try {
             $product = new Product($request->all());
             $product->save();
-    
-            if($request->hasFile('image')){
+
+            if ($request->hasFile('image')) {
                 $image_path = 'public/images';
                 $image = $request->file('image');
                 $name_image = time() . "-" . $image->getClientOriginalName();
                 $request->file('image')->storeAs($image_path, $name_image);
-    
+
                 $product->image()->create(['urlss' => $name_image]);
-                
             }
             DB::commit();
             return Redirect::route('products.index');
-        }
-        catch(Exception $exc) {
+        } catch (Exception $exc) {
             DB::rollBack();
             return Redirect::route('products.index');
         }
-
-
-        
-        
     }
 
     /**
@@ -93,24 +87,35 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $product = Product::find($id);
-        $product->name = $request->name;
-        $product->sale_price = $request->sale_price;
-        $product->quantity = $request->quantity;
-        $product->status = $request->status;
-        $product->category_id = $request->category_id;
-        $product->save();
+        $request->validate([
+            'name' => 'required|min:3|max:75|unique:products,name,except,id',
+            'sale_price' => 'required',
+            'status' => 'required'
+        ]);
+        DB::beginTransaction();
+        try {
+            $product = Product::find($id);
+            $product->name = $request->name;
+            $product->sale_price = $request->sale_price;
+            $product->quantity = $request->quantity;
+            $product->status = $request->status;
+            $product->category_id = $request->category_id;
+            $product->save();
 
-        if($request->hasFile('image')){
-            $image_path = 'public/images';
-            $image = $request->file('image');
-            $name_image = time() . "-" . $image->getClientOriginalName();
-            $request->file('image')->storeAs($image_path, $name_image);
+            if ($request->hasFile('image')) {
+                $image_path = 'public/images';
+                $image = $request->file('image');
+                $name_image = time() . "-" . $image->getClientOriginalName();
+                $request->file('image')->storeAs($image_path, $name_image);
 
-            $product->image()->update(['url' => $name_image]);
+                $product->image()->update(['url' => $name_image]);
+            }
+            DB::commit();
+            return Redirect::route('products.index');
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('products.index');
         }
-
-        return Redirect::route('products.index');
     }
 
     /**
@@ -122,6 +127,5 @@ class ProductController extends Controller
         $product->delete();
 
         return Redirect::route('products.index');
-
     }
 }

@@ -60,7 +60,6 @@ class ClientController extends Controller
     {
         $client = Client::find($id);
         return Inertia::render('Client/Show', ['client' => $client]);
-        return Json()->decore(['client' => $client]);
     }
 
     /**
