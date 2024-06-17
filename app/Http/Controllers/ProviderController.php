@@ -6,6 +6,10 @@ use App\Models\Provider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ProviderMail;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class ProviderController extends Controller
 {
@@ -31,15 +35,29 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        $provider = new Provider();
-        $provider->company = $request->company;
-        $provider->contact = $request->contact;
-        $provider->cell_phone = $request->cell_phone;
-        $provider->address = $request->address;
-        $provider->email = $request->email;
-        $provider->save();
+        $request->validate([
+            'company' => 'required|min:3|max:35',
+            'contact' => 'required|min:3|max:75',
+            'cell_phone' => 'nullable|min:5|max:18',
+            'email' => 'nullable|email',
+        ]);
 
-        return Redirect::route('providers.index');
+        DB::beginTransaction();
+        try {
+            $provider = new Provider();
+            $provider->company = $request->company;
+            $provider->contact = $request->contact;
+            $provider->cell_phone = $request->cell_phone;
+            $provider->address = $request->address;
+            $provider->email = $request->email;
+            $provider->save();
+
+            DB::commit();
+            return Redirect::route('providers.index');
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('providers.index');
+        }
     }
 
     /**
@@ -65,15 +83,33 @@ class ProviderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $provider = Provider::find($id);
-        $provider->company = $request->company;
-        $provider->contact = $request->contact;
-        $provider->cell_phone = $request->cell_phone;
-        $provider->address = $request->address;
-        $provider->email = $request->email;
-        $provider->save();
+        $request->validate([
+            'company' => 'required|min:3|max:35',
+            'contact' => 'required|min:3|max:75',
+            'cell_phone' => 'nullable|min:5|max:18',
+            'email' => 'nullable|email',
+        ]);
 
-        return Redirect::route('providers.index');
+        DB::beginTransaction();
+        try {
+            $provider = Provider::find($id);
+            $provider->company = $request->company;
+            $provider->contact = $request->contact;
+            $provider->cell_phone = $request->cell_phone;
+            $provider->address = $request->address;
+            $provider->email = $request->email;
+            $provider->save();
+
+            if ($provider->email !== '') {
+                Mail::to($provider->email)->send(new ProviderMail($provider));
+            }
+
+            DB::commit();
+            return Redirect::route('providers.index');
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('providers.index');
+        }
     }
 
     /**

@@ -12,7 +12,6 @@ class Product extends Model
 {
     use HasFactory;
     protected  $table = "products";
-
     protected $fillable = ['name', 'sale_price', 'quantity', 'status', 'category_id'];
 
     public function category(): BelongsTo
@@ -25,7 +24,7 @@ class Product extends Model
         return $this->belongsToMany(Buy::class);
     }
 
-    public function image() : MorphOne
+    public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }

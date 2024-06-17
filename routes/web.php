@@ -21,15 +21,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/test', function () {
-    /* $category = new Category();
-    $category->name = "Aguas y geseosas";
-    $category->save(); */
-
-    $categories = Category::select('name')->get();
-    return view('test', ['categories' => $categories]);
-});
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -40,38 +31,37 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/categories', 'index')->name('categories.index');
         Route::get('/categories/create', 'create');
-        Route::post('/categories/store', 'store');
+        Route::post('/categories/store', 'store')->name('categories.store');
         Route::get('/categories/show/{id}', 'show');
         Route::get('/categories/edit/{id}', 'edit');
-        Route::put('/categories/update/{id}', 'update');
+        Route::put('/categories/update/{id}', 'update')->name('categories.update');
         Route::delete('/categories/delete/{id}', 'destroy');
     });
-    
+
     Route::controller(ProductController::class)->group(function () {
-        Route::get('/products', 'index');
+        Route::get('/products', 'index')->name('products.index');
         Route::get('/products/create', 'create');
-        Route::post('/products/store', 'store');
+        Route::post('/products/store', 'store')->name('products.store');
         Route::get('/products/show/{id}', 'show');
         Route::get('/products/edit/{id}', 'edit');
         Route::put('/products/update/{id}', 'update');
         Route::delete('/products/delete/{id}', 'destroy');
     });
-    
-    
+
     Route::controller(ProviderController::class)->group(function () {
-        Route::get('/providers', 'index');
+        Route::get('/providers', 'index')->name('providers.index');
         Route::get('/providers/create', 'create');
-        Route::post('/providers', 'store');
+        Route::post('/providers', 'store')->name('providers.store');
         Route::get('/providers/{id}', 'show');
         Route::get('/providers/{id}/edit', 'edit');
-        Route::put('/providers/{id}', 'update');
+        Route::put('/providers/{id}', 'update')->name('providers.update');
         Route::delete('/providers/{id}', 'destroy');
     });
-    
+
     Route::controller(BuyController::class)->group(function () {
         Route::get('/buys', 'index');
         Route::get('/buys/create', 'create');
@@ -81,17 +71,17 @@ Route::middleware('auth')->group(function() {
         Route::put('/buys/{id}', 'update');
         Route::delete('/buys/{id}', 'destroy');
     });
-    
+
     Route::controller(ClientController::class)->group(function () {
-        Route::get('/clients', 'index');
-        Route::get('/clients/create', 'create');
-        Route::post('/clients', 'store');
-        Route::get('/clients/{id}', 'show');
-        Route::get('/clients/{id}/edit', 'edit');
-        Route::put('/clients/{id}', 'update');
-        Route::delete('/clients/{id}', 'destroy');
+        Route::get('/clients', 'index')->name('clients.index');
+        Route::get('/clients/create', 'create')->name('clients.create');
+        Route::post('/clients', 'store')->name('clients.store');
+        Route::get('/clients/{id}', 'show')->name('clients.show');
+        Route::get('/clients/{id}/edit', 'edit')->name('clients.edit');
+        Route::put('/clients/{id}', 'update')->name('clients.update');
+        Route::delete('/clients/{id}', 'destroy')->name('clients.destroy');
     });
-    
+
     Route::controller(SaleController::class)->group(function () {
         Route::get('/sales', 'index');
         Route::get('/sales/create', 'create');

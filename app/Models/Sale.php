@@ -11,6 +11,7 @@ class Sale extends Model
 {
     use HasFactory;
     protected $table = "sales";
+    protected $fillable = ['sale_date', 'client_id', 'user_id'];
 
     public function products(): BelongsToMany
     {
