@@ -88,7 +88,7 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|min:3|max:75|unique:products,name,except,id',
+            'name' => 'required|min:3|max:75|unique:products,name,'. $id,
             'sale_price' => 'required',
             'status' => 'required'
         ]);
@@ -108,7 +108,12 @@ class ProductController extends Controller
                 $name_image = time() . "-" . $image->getClientOriginalName();
                 $request->file('image')->storeAs($image_path, $name_image);
 
-                $product->image()->update(['url' => $name_image]);
+                if($product->image === null){
+                    $product->image()->create(['url' => $name_image]);
+                }
+                else {
+                    $product->image()->update(['url' => $name_image]);
+                }
             }
             DB::commit();
             return Redirect::route('products.index');

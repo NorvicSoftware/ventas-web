@@ -11,7 +11,7 @@ import InputError from "@/Components/InputError";
 
 export default function Form({ id = 0, product = {}, categories = [] }) {
     const [showModal, setShowModal] = useState(false);
-    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', sale_price: '', quantity: '', status: 'Activo', category_id: '', image: '' });
+    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', sale_price: '', quantity: '', status: 'Activo', category_id: '', image: '', _method:'PUT' });
 
     function openModal() {
         setShowModal(true);
@@ -46,7 +46,7 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
         }
         else {
             console.log('update');
-            put(route('categories.update', id), {
+            post(route('products.update', id), {
                 onSuccess: (res) => {
                     console.log('OK', res);
                     closeModal();
