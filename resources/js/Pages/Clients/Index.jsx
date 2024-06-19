@@ -19,6 +19,9 @@ export default function Index({ auth }) {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <div className="flex justify-between items-center pb-2">
                                 <TextInput
+                                    isFocused={true}
+                                    type="text"
+                                    name="search"
                                     placeholder="Buscar"
                                     onChange={(event) =>
                                         setSearchClient(event.target.value)
@@ -28,34 +31,44 @@ export default function Index({ auth }) {
                             </div>
                             <div>
                                 <table className="min-w-full text-gray-800 dark:text-gray-200">
-                                    <thead className="uppercase bg-gray-500 border border-gray-300">
+                                    <thead className="uppercase bg-gray-500">
                                         <tr>
-                                            <th className="py-2">DNI</th>
-                                            <th className="py-2">Nombre</th>
-                                            <th className="py-2">Celular</th>
-                                            <th className="py-2">Dirección</th>
-                                            <th className="py-2">Acciones</th>
+                                            <th className="text-gray-200 py-2">
+                                                DNI
+                                            </th>
+                                            <th className="text-gray-200 py-2">
+                                                Nombre
+                                            </th>
+                                            <th className="text-gray-200 py-2">
+                                                Celular
+                                            </th>
+                                            <th className="text-gray-200 py-2">
+                                                Dirección
+                                            </th>
+                                            <th className="text-gray-200 py-2">
+                                                Acciones
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {filteredClient.map((client) => (
                                             <tr
                                                 key={client.id}
-                                                className="hover:bg-gray-900 py-2 px-3 border border-gray-300"
+                                                className="hover:bg-gray-200 dark:hover:bg-gray-900 py-2 px-3 border border-gray-300"
                                             >
-                                                <td className="py-2 px-3">
+                                                <td className="py-2 px-3 boder border-gray-300">
                                                     {client.dni}
                                                 </td>
-                                                <td className="py-2 px-3">
+                                                <td className="py-2 px-3 border border-gray-300">
                                                     {client.full_name}
                                                 </td>
-                                                <td className="py-2 px-3">
+                                                <td className="py-2 px-3 border border-gray-300">
                                                     {client.cell_phone}
                                                 </td>
-                                                <td className="py-2 px-3">
+                                                <td className="py-2 px-3 border border-gray-300">
                                                     {client.address}
                                                 </td>
-                                                <td className="py-2 px-3">
+                                                <td className="py-2 px-3 border border-gray-300">
                                                     <Form
                                                         id={client.id}
                                                         client={client}
