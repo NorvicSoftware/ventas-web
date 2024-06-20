@@ -1,4 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import VerticalLayout from "@/Layouts/VerticalLayout";
 import { usePage, Head } from "@inertiajs/react";
 import { useState } from "react";
 import Form from "./Form";
