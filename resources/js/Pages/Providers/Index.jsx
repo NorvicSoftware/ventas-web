@@ -6,12 +6,17 @@ import Form from "./Form";
 
 export default function Index({ auth }) {
     const { providers } = usePage().props;
-    const [searchProvider, setSearchProvider] = useState('');
+    const [searchProvider, setSearchProvider] = useState("");
 
     const filteredProvider = providers.filter(
-        provider => provider.contact.toLocaleLowerCase().includes(searchProvider.toLocaleLowerCase()) || provider.company.toLocaleLowerCase().includes(searchProvider.toLocaleLowerCase())
+        (provider) =>
+            provider.contact
+                .toLocaleLowerCase()
+                .includes(searchProvider.toLocaleLowerCase()) ||
+            provider.company
+                .toLocaleLowerCase()
+                .includes(searchProvider.toLocaleLowerCase())
     );
-
 
     return (
         <AuthenticatedLayout user={auth.user} header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Proveedores</h2>}>
@@ -26,7 +31,7 @@ export default function Index({ auth }) {
                             </div>
                             <div>
                                 <table className=" min-w-full">
-                                    <thead className="uppercase text-white">
+                                    <thead className="uppercase bg-gray-500 text-gray-800 dark:text-gray-200">
                                         <tr>
                                             <th className=" bg-gray-500 py-2">Empresa</th>
                                             <th className=" bg-gray-500 py-2">Contacto</th>
@@ -52,7 +57,6 @@ export default function Index({ auth }) {
                     </div>
                 </div>
             </div>
-
         </AuthenticatedLayout>
-    )
+    );
 }

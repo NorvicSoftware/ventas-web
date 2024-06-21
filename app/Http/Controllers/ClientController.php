@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Mail\ClientMail;
+use Exception;
 use Illuminate\Support\Facades\Mail;
 
 class ClientController extends Controller
@@ -16,7 +17,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::paginate(20);
         return Inertia::render('Clients/Index', ['clients' => $clients]);
     }
 
@@ -37,20 +38,23 @@ class ClientController extends Controller
             'dni' => 'required',
             'full_name' => 'required',
         ]);
+        try {
+            $client = new Client();
+            $client->dni = $request->dni;
+            $client->full_name = $request->full_name;
+            $client->cell_phone = $request->cell_phone;
+            $client->address = $request->address;
+            $client->email = $request->email;
+            $client->save();
 
-        $client = new Client();
-        $client->dni = $request->dni;
-        $client->full_name = $request->full_name;
-        $client->cell_phone = $request->cell_phone;
-        $client->address = $request->address;
-        $client->email = $request->email;
-        $client->save();
+            if ($request->email !== '') {
+                Mail::to($client->email)->send(new ClientMail($client));
+            }
 
-        if($client->email !== ''){
-            Mail::to($client->email)->send(new ClientMail($client));
+            return Redirect::route('clients.index')->with(['status' => true, 'message' => 'El cliente fue registrado correctamente']);
+        } catch (Exception $exc) {
+            return Redirect::route('clients.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.' ]);
         }
-
-        return Redirect::route('clients.index');
     }
 
     /**
@@ -76,14 +80,23 @@ class ClientController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $client = Client::find($id);
-        $client->dni = $request->dni;
-        $client->full_name = $request->full_name;
-        $client->cell_phone = $request->cell_phone;
-        $client->address = $request->address;
-        $client->save();
+        $request->validate([
+            'dni' => 'required',
+            'full_name' => 'required',
+        ]);
+        try {
+            $client = Client::find($id);
+            $client->dni = $request->dni;
+            $client->full_name = $request->full_name;
+            $client->cell_phone = $request->cell_phone;
+            $client->address = $request->address;
+            $client->email = $request->email;
+            $client->save();
 
-        return Redirect::route('clients.index');
+            return Redirect::route('clients.index');
+        } catch (Exception $exc) {
+            return Redirect::route('clients.index');
+        }
     }
 
     /**

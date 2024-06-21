@@ -11,6 +11,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -21,11 +22,13 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -48,7 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/products/store', 'store')->name('products.store');
         Route::get('/products/show/{id}', 'show');
         Route::get('/products/edit/{id}', 'edit');
-        Route::put('/products/update/{id}', 'update');
+        Route::post('/products/update/{id}', 'update')->name('products.update');
         Route::delete('/products/delete/{id}', 'destroy');
     });
 
