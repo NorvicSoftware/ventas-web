@@ -6,20 +6,41 @@ export default function Dashboard({ auth }) {
     const { products, categories } = usePage().props;
     const [searchProduct, setSearchProduct] = useState('');
     const [searchCategory, setSearchCategory] = useState(0);
+    const [productsForSale, setProductsForSale] = useState([]);
 
     const filteredProduct = products.filter(
 
-        Number(searchCategory) === 0 ? 
+        Number(searchCategory) === 0 ?
             product => product.name.toLocaleLowerCase().includes(searchProduct.toLocaleLowerCase())
-        :
+            :
             product => {
                 const auxFilterCategory = Number(product.category_id) === Number(searchCategory);
                 const auxFilterProduct = product.name.toLocaleLowerCase().includes(searchProduct.toLocaleLowerCase())
 
                 return auxFilterCategory && auxFilterProduct
-            } 
-        
+            }
+
     );
+
+    const addProductForSale = (product) => {
+        console.log(product);
+        setProductsForSale((addProduct) => {
+            const existingProduct = addProduct.find((item) => item.id === product.id);
+            if (existingProduct) {
+                return addProduct.map((item) => (
+                    item.id === product.id ? { id: product.id, name: product.name, sale_price: product.sale_price, quantity: item.quantity + 1 }
+                        : item
+                ));
+            }
+            else {
+                return [...addProduct, { id: product.id, name: product.name, sale_price: product.sale_price, quantity: 1 }];
+            }
+
+        });
+    }
+    const calculateTotal = () => {
+        return productsForSale.reduce((total, product) => total + (product.sale_price * product.quantity), 0).toFixed(2);
+    }
 
     return (
         <AuthenticatedLayout
@@ -38,7 +59,7 @@ export default function Dashboard({ auth }) {
                                         <option value={0}>Todos</option>
                                         {categories.map(category => (
                                             <option key={category.id} value={category.id}>{category.name}</option>
-                                        )) }
+                                        ))}
                                     </select>
                                     <input type='text' placeholder='Escanear el Codigo' />
                                 </div>
@@ -49,31 +70,50 @@ export default function Dashboard({ auth }) {
                                     <div key={product.id}>
                                         {product.image ? (
                                             <div className='p-1 rounded shadow-lg mb-2'>
-                                                <img src={'storage/images/' + product.image.url}  className=' h-48 w-full object-cover'/>
-                                                <div className='flex justify-between items-center'>
-                                                    <p className='text-sm'>{product.name}</p>
-                                                    <p className='text-sm'>{product.sale_price}</p>
-                                                </div>
+                                                <img src={'storage/images/' + product.image.url} className=' h-48 w-full object-cover' />
+                                                <button onClick={(e) => addProductForSale(product)} className=' bg-blue-500 hover:bg-blue-600 p-2 text-white rounded w-full flex justify-between items-center'>
+                                                    <span className='text-xs'>{product.name}</span>
+                                                    <span>{product.sale_price}</span>
+                                                </button>
                                             </div>
                                         ) : (
                                             <div className='p-1 rounded shadow-lg mb-2'>
-                                                <img src='img/imagen-por-defecto.png' className=' h-48 w-full object-cover'/>
-                                                <div className='flex justify-between items-center'>
-                                                    <p className='text-sm'>{product.name}</p>
-                                                    <p className='text-sm'>{product.sale_price}</p>
-                                                </div>
+                                                <img src='img/imagen-por-defecto.png' className=' h-48 w-full object-cover' />
+                                                <button onClick={(e) => addProductForSale(product)} className=' bg-blue-500 hover:bg-blue-600 p-2 text-white rounded w-full flex justify-between items-center'>
+                                                    <span className='text-xs'>{product.name}</span>
+                                                    <span>{product.sale_price}</span>
+                                                </button>
                                             </div>
                                         )}
                                     </div>
-
-
                                 ))}
-
                             </div>
                         </div>
-                        <div className='bg-white shadow-sm'>
-                            <p>Productos seleccionados</p>
+                        <div className='bg-white shadow-sm p-2 text-sm'>
+                            <div className='flex justify-between'>
+                                <p>Producto</p>
+                                <div className=' space-x-2'>
+                                    <span>Cant.</span>
+                                    <span>Precio</span>
+                                    <span>SubTotal</span>
+                                </div>
+                            </div>
+                            {productsForSale.map(product => (
+                                <div key={product.id} className='flex justify-between'>
+                                    <p>{product.name}</p>
+                                    <div className=' space-x-8'>
+                                        <span>{product.quantity}</span>
+                                        <span>{product.sale_price}</span>
+                                        <span>{(product.sale_price * product.quantity).toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className='flex justify-between font-bold'>
+                                <span>TOTAL:</span>
+                                <span>{calculateTotal()}</span>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
