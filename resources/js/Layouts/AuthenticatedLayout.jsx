@@ -9,6 +9,11 @@ import { ToastContainer } from 'react-toastify';
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+    console.log(user.roles[0].permissions[2].name);
+
+    const hasPermission = (permission) => {
+        return user.roles[0].permissions[2].name === permission;
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -31,22 +36,28 @@ export default function Authenticated({ user, header, children }) {
                                     Ventas
                                 </NavLink>
                             </div>
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("categories.index")}
-                                    active={route().current("categories.index")}
-                                >
-                                    Categorias
-                                </NavLink>
-                            </div>
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("providers.index")}
-                                    active={route().current("providers.index")}
-                                >
-                                    Proveedores
-                                </NavLink>
-                            </div>
+                            {hasPermission('Lectura categorias') && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("categories.index")}
+                                        active={route().current("categories.index")}
+                                    >
+                                        Categorias
+                                    </NavLink>
+                                </div>
+                            )}
+                            {hasPermission('Lectura proveedores') && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                    <NavLink
+                                        href={route("providers.index")}
+                                        active={route().current("providers.index")}
+                                    >
+                                        Proveedores
+                                    </NavLink>
+                                </div>
+                            )}
+
+
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     href={route("clients.index")}
@@ -61,6 +72,22 @@ export default function Authenticated({ user, header, children }) {
                                     active={route().current("products.index")}
                                 >
                                     Productos
+                                </NavLink>
+                            </div>
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink
+                                    href={route("roles.index")}
+                                    active={route().current("roles.index")}
+                                >
+                                    Roles
+                                </NavLink>
+                            </div>
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink
+                                    href={route("users.index")}
+                                    active={route().current("users.index")}
+                                >
+                                    Usuarios
                                 </NavLink>
                             </div>
                         </div>

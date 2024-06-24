@@ -12,6 +12,8 @@ use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -35,6 +37,20 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::controller(RoleController::class)->group(function () {
+        Route::get('/roles', 'index')->name('roles.index');
+        Route::post('/roles/store', 'store')->name('roles.store');
+        Route::put('/roles/update/{id}', 'update')->name('roles.update');
+    });
+
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users', 'index')->name('users.index');
+        Route::post('/users/store', 'store')->name('users.store');
+        // Route::put('/roles/update/{id}', 'update')->name('roles.update');
+    });
+
+
     Route::controller(CategoryController::class)->group(function () {
         Route::get('/categories', 'index')->name('categories.index');
         Route::get('/categories/create', 'create');

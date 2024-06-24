@@ -53,7 +53,7 @@ class ProductController extends Controller
                 $name_image = time() . "-" . $image->getClientOriginalName();
                 $request->file('image')->storeAs($image_path, $name_image);
 
-                $product->image()->create(['urlss' => $name_image]);
+                $product->image()->create(['url' => $name_image]);
             }
             DB::commit();
             return Redirect::route('products.index');
