@@ -8,6 +8,7 @@ import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import InputError from "@/Components/InputError";
+import Checkbox from "@/Components/Checkbox";
 
 export default function Form({ id = 0, role = {}, permissions = {} }) {
     const [showModal, setShowModal] = useState(false);
@@ -88,13 +89,8 @@ export default function Form({ id = 0, role = {}, permissions = {} }) {
                         {permissions.map(permission => (
                             <div key={permission.id}>
                                 <label>
-                                    <input type="checkbox"
-                                        value={permission.name}
-                                        checked={data.permissions.includes(permission.name)}
-                                        onChange={(e) => LoadPermissionChange(e.target.value)}
-                                    />
+                                    <Checkbox value={permission.name} checked={data.permissions.includes(permission.name)} onChange={(e) => LoadPermissionChange(e.target.value)}/>
                                     {permission.name}
-
                                 </label>
                             </div>
 

@@ -8,17 +8,20 @@ import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import InputError from "@/Components/InputError";
+import TextSelect from "@/Components/TextSelect";
 
-export default function Form({ id = 0, user = {} }) {
+export default function Form({ id = 0, user = {}, roles = [] }) {
     const [showModal, setShowModal] = useState(false);
-    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', email: '', password:'', password_confirmation: '', status: 1 });
+    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', email: '', password: '', password_confirmation: '', status: 1, role_name: '' });
 
+    console.log(user);
     function openModal() {
         setShowModal(true);
         if (id !== 0) {
             setData({
                 'name': user.name,
-                'description': !user.description ? '' : user.description,
+                'email': !user.email ? '' : user.email,
+                'role_name': user.roles[0].name
             })
         }
     }
@@ -43,7 +46,7 @@ export default function Form({ id = 0, user = {} }) {
         }
         else {
             console.log('update');
-            put(route('categories.update', id), {
+            put(route('users.update', id), {
                 onSuccess: (res) => {
                     console.log('OK', res);
                     closeModal();
@@ -85,17 +88,26 @@ export default function Form({ id = 0, user = {} }) {
                             )}
                         </div>
                         <div>
-                            <InputLabel value="Contraseña" />
-                            <TextInput className=" block w-full mb-2" type="password" name="password" maxLength={75} value={data.password} onChange={(e) => setData('password', e.target.value)} />
-                            {errors.password && (
-                                <InputError message={errors.password}></InputError>
-                            )}
+                            <InputLabel value="Rol" />
+                            <TextSelect options={roles} value={data.role_name} formater={1} onChange={(e) => setData('role_name', e.target.value)} />
                         </div>
-                        <div>
-                            <InputLabel value="Confirmar Contraseña" />
-                            <TextInput className=" block w-full mb-2" type="password" name="password_confirmation" maxLength={75} value={data.password_confirmation} onChange={(e) => setData('password_confirmation', e.target.value)} />
-                            
-                        </div>
+                        {id === 0 && (
+                            <>
+                                <div>
+                                    <InputLabel value="Contraseña" />
+                                    <TextInput className=" block w-full mb-2" type="password" name="password" maxLength={75} value={data.password} onChange={(e) => setData('password', e.target.value)} />
+                                    {errors.password && (
+                                        <InputError message={errors.password}></InputError>
+                                    )}
+                                </div>
+                                <div>
+                                    <InputLabel value="Confirmar Contraseña" />
+                                    <TextInput className=" block w-full mb-2" type="password" name="password_confirmation" maxLength={75} value={data.password_confirmation} onChange={(e) => setData('password_confirmation', e.target.value)} />
+
+                                </div>
+                            </>
+                        )}
+
                         <div className=" space-x-2 flex justify-end">
                             <SecondaryButton type="button" onClick={closeModal}>Cancelar</SecondaryButton>
                             <PrimaryButton onClick={submituser}>Guardar</PrimaryButton>

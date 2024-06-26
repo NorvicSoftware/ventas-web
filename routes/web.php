@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/users', 'index')->name('users.index');
         Route::post('/users/store', 'store')->name('users.store');
-        // Route::put('/roles/update/{id}', 'update')->name('roles.update');
+        Route::put('/users/update/{id}', 'update')->name('users.update');
     });
 
 
@@ -102,13 +102,13 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::controller(SaleController::class)->group(function () {
-        Route::get('/sales', 'index');
-        Route::get('/sales/create', 'create');
-        Route::post('/sales', 'store');
-        Route::get('/sales/{id}', 'show');
-        Route::get('/sales/{id}/edit', 'edit');
-        Route::put('/sales/{id}', 'update');
-        Route::delete('/sales/{id}', 'destroy');
+        // Route::get('/sales', 'index');
+        // Route::get('/sales/create', 'create');
+        Route::post('/sales', 'store')->name('sales.store');
+        // Route::get('/sales/{id}', 'show');
+        // Route::get('/sales/{id}/edit', 'edit');
+        // Route::put('/sales/{id}', 'update');
+        // Route::delete('/sales/{id}', 'destroy');
     });
 });
 

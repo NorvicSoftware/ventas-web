@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         // $products = DB::table('products')->join('categories', 'categories.id', '=', 'products.category_id')->select('products.*', 'categories.name as category_name')->get();
         $categories = Category::all();
-        $products = Product::with(['category'])->get();
+        $products = Product::with(['category', 'image'])->get();
         return Inertia::render('Products/Index', ['products' => $products, 'categories' => $categories]);
     }
 

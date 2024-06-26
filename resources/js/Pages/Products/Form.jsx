@@ -8,11 +8,17 @@ import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import InputError from "@/Components/InputError";
+import TextSelect from "@/Components/TextSelect";
 
 export default function Form({ id = 0, product = {}, categories = [] }) {
     const [showModal, setShowModal] = useState(false);
-    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', sale_price: '', quantity: '', status: 'Activo', category_id: '', image: '', _method:'PUT' });
+    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', sale_price: '', quantity: '', status: 'Activo', category_id: '', image: ''});
 
+    const statusProduct = [
+        { id: 'Activo', name: 'Activo'},
+        { id: 'Descontinuado', name: 'Descontinuado'},
+    ]
+    
     function openModal() {
         setShowModal(true);
         if (id !== 0) {
@@ -47,6 +53,7 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
         else {
             console.log('update');
             post(route('products.update', id), {
+                _method:'PUT', 
                 onSuccess: (res) => {
                     console.log('OK', res);
                     closeModal();
@@ -93,19 +100,20 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
                         </div>
                         <div>
                             <InputLabel value="Estado" />
-                            {/* <TextInput className=" block w-full mb-2" type="text" name="status" value={data.status} onChange={(e) => setData('status', e.target.value)} /> */}
-                            <select onChange={(e) => setData('status', e.target.value)}>
+                            <TextSelect options={statusProduct} onChange={(e) => setData('status', e.target.value)}/>
+                            {/* <select onChange={(e) => setData('status', e.target.value)}>
                                 <option value="Activo">Activo</option>
                                 <option value="Descontinuado">Descontinuado</option>
-                            </select>
+                            </select> */}
                         </div>
                         <div>
                             <InputLabel value="Categoria" />
-                            <select onChange={(e) => setData('category_id', e.target.value)}>
+                            <TextSelect options={categories} onChange={(e) => setData('category_id', e.target.value)}/>
+                            {/* <select onChange={(e) => setData('category_id', e.target.value)}>
                                 {categories.map(category => (
                                     <option key={category.id} value={category.id}>{category.name}</option>
                                 ))}
-                            </select>
+                            </select> */}
                         </div>
                         <div>
                             <input type="file" onChange={(e) => setData('image', e.target.files[0])} />

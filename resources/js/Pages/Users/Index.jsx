@@ -7,9 +7,8 @@ import TextInput from "@/Components/TextInput";
 
 export default function Index({ auth }) {
 
-    const { users } = usePage().props;
+    const { users, roles } = usePage().props;
     const [searchUser, setSearchUser] = useState('');
-    // console.log(auth.user);
 
     const filteredUser = users.filter(
         user => user.name.toLocaleLowerCase().includes(searchUser.toLocaleLowerCase())
@@ -24,7 +23,7 @@ export default function Index({ auth }) {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <div className=" flex justify-between items-center pb-2">
                                 <TextInput isFocused={true} type="text" name="search" placeholder="Buscar..." onChange={(event) => setSearchUser(event.target.value)} />
-                                <Form />
+                                <Form roles={roles}/>
                             </div>
                             <div>
                                 <table className="min-w-full">
@@ -41,7 +40,7 @@ export default function Index({ auth }) {
                                                 <td className="py-2 px-3 border border-gray-300">{user.name}</td>
                                                 <td className="py-2 px-3 border border-gray-300">{user.email}</td>
                                                 <td className="py-2 px-3 border border-gray-300">
-                                                    <Form id={user.id} user={user} />
+                                                    <Form id={user.id} user={user} roles={roles}/>
                                                 </td>
                                             </tr>
                                         ))}

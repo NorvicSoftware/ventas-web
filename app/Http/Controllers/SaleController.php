@@ -6,6 +6,7 @@ use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use App\Models\Client;
 
 class SaleController extends Controller
 {
@@ -31,13 +32,29 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+
+        $client = Client::where('dni', '=', $request->dni)->first();
+
+        if (!$client) {
+            $client = new Client();
+            $client->dni = $request->dni;
+            $client->full_name = $request->client_name;
+            $client->save();
+        }
+
         $sale = new Sale();
-        $sale->sale_date = $request->sale_date;
-        $sale->client_id = $request->client_id;
-        $sale->user_id = $request->user_id;
+        $sale->sale_date = now();
+        $sale->client_id = $client->id;
+        $sale->user_id = auth()->id();
         $sale->save();
 
-        return Redirect::route('sales.index');
+
+        foreach($request->products as $product){
+            $sale->products()->attach($product['id'], ['quantity' => $product['quantity'], 'sale_price' => $product['sale_price']]);
+        }
+        
+
+        return Redirect::route('dashboard');
     }
 
     /**

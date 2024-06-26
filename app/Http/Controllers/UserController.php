@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -15,8 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return Inertia::render('Users/Index', ['users' => $users]);
+        $users = User::with(['roles'])->get();
+        $roles = Role::all();
+        return Inertia::render('Users/Index', ['users' => $users, 'roles' => $roles]);
     }
 
     /**
@@ -45,7 +47,7 @@ class UserController extends Controller
         $user->status = $request->status;
         $user->save();
         
-        $user->assignRole('Administrador');
+        $user->assignRole($request->role_name);
 
         return Redirect::route('users.index');
 
@@ -72,7 +74,19 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+        
+        $user->syncRoles($request->role_name);
+
+        return Redirect::route('users.index');
     }
 
     /**

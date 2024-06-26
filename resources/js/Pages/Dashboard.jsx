@@ -1,6 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import Form from './Sales/Form';
 
 export default function Dashboard({ auth }) {
     const { products, categories } = usePage().props;
@@ -111,6 +112,9 @@ export default function Dashboard({ auth }) {
                             <div className='flex justify-between font-bold'>
                                 <span>TOTAL:</span>
                                 <span>{calculateTotal()}</span>
+                            </div>
+                            <div>
+                                <Form products={productsForSale}/>
                             </div>
                         </div>
 
