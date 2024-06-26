@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Validation\Rules\In;
 use Inertia\Inertia;
+use Exception;
 
 class CategoryController extends Controller
 {
@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('name', 'ASC')->get();
         return Inertia::render('Categories/Index', ['categories' => $categories]);
     }
 
@@ -33,15 +33,19 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|min:3|max:35'
         ]);
 
-        $category = new Category();
-        $category->name = $request->name;
-        $category->description = $request->description;
-        $category->save();
+        try {
+            $category = new Category();
+            $category->name = $request->name;
+            $category->description = $request->description;
+            $category->save();
 
-        return Redirect::route('categories.index');
+            return Redirect::route('categories.index')->with(['status' => true, 'message' => 'La categoria ' . $category->name . ' fue registrada correctamente']);
+        } catch (Exception $exc) {
+            return Redirect::route('categories.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
+        }
     }
 
     /**
@@ -68,16 +72,19 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required|min:3|max:35'
         ]);
-        
-        $category = Category::findOrFail($id);
-        $category->name = $request->name;
-        $category->description = $request->description;
-        $category->save();
 
-        return Redirect::route('categories.index');
+        try {
+            $category = Category::findOrFail($id);
+            $category->name = $request->name;
+            $category->description = $request->description;
+            $category->save();
 
+            return Redirect::route('categories.index')->with(['status' => true, 'message' => 'La categoria ' . $category->name . ' fue actualizada correctamente']);
+        } catch (Exception $exc) {
+            return Redirect::route('categories.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
+        }
     }
 
     /**

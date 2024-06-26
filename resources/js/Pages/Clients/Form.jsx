@@ -63,10 +63,17 @@ export default function Form({ id = 0, client = {} }) {
             put(route("clients.update", id), {
                 onSuccess: (res) => {
                     console.log("ok", res);
+                    if(res.props.flash.status){
+                        toast.success(res.props.flash.message);
+                    }
+                    else {
+                        toast.error(res.props.flash.message);
+                    }
                     closeModal();
                 },
                 onError: (error) => {
                     console.log("error", error);
+                    toast.error('Existen errores en el formulario.');
                 },
             });
         }
@@ -87,7 +94,7 @@ export default function Form({ id = 0, client = {} }) {
             <Modal show={showModal} closeable={true} onClose={closeModal}>
                 <div className="p-4">
                     <div className=" flex justify-between pb-4">
-                        <h2 className=" font-semibold ">CREAR NUEVO CLIENTE</h2>
+                        <h2 className=" font-semibold ">{id === 0 ? "CREAR NUEVO CLIENTE" : "EDITAR CLIENTE"}</h2>
                         <button
                             type="button"
                             onClick={closeModal}
@@ -102,6 +109,8 @@ export default function Form({ id = 0, client = {} }) {
                             className="block w-full mb-2"
                             type="text"
                             name="dni"
+                            placeholder="DNI"
+                            maxLength={15}
                             value={data.dni}
                             onChange={(e) => setData("dni", e.target.value)}
                         />
@@ -113,6 +122,8 @@ export default function Form({ id = 0, client = {} }) {
                             className="block w-full mb-2"
                             type="text"
                             name="full_name"
+                            placeholder="Nombre Completo"
+                            maxLength={75}
                             value={data.full_name}
                             onChange={(e) => {
                                 setData("full_name", e.target.value);
@@ -126,6 +137,8 @@ export default function Form({ id = 0, client = {} }) {
                             className="block w-full mb-2"
                             type="text"
                             name="cell_phone"
+                            placeholder="Celular"
+                            maxLength={15}
                             value={data.cell_phone}
                             onChange={(e) => {
                                 setData("cell_phone", e.target.value);
@@ -136,6 +149,8 @@ export default function Form({ id = 0, client = {} }) {
                             className="block w-full mb-2"
                             type="text"
                             name="email"
+                            placeholder="Correo electrónico"
+                            maxLength={75}
                             value={data.email}
                             onChange={(e) => {
                                 setData("email", e.target.value);
@@ -146,6 +161,8 @@ export default function Form({ id = 0, client = {} }) {
                             className="block w-full mb-2"
                             type="text"
                             name="address"
+                            placeholder="Dirección"
+                            maxLength={75}
                             value={data.address}
                             onChange={(e) => {
                                 setData("address", e.target.value);

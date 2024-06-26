@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(ProductSeeder::class);
         // $this->call(ClientSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(PermissionSeeder::class);
 
         // $products = Product::factory(50)->create();
         // Client::factory(20)->create();

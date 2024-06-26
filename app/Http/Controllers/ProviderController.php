@@ -18,7 +18,7 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        $providers = Provider::all();
+        $providers = Provider::orderBy('company', 'ASC')->get();
         return Inertia::render('Providers/Index', ['providers' => $providers]);
     }
 
@@ -53,10 +53,10 @@ class ProviderController extends Controller
             $provider->save();
 
             DB::commit();
-            return Redirect::route('providers.index');
+            return Redirect::route('providers.index')->with(['status' => true, 'message' => 'El proveedor ' . $provider->company . ' fue registrado correctamente']);
         } catch (Exception $exc) {
             DB::rollBack();
-            return Redirect::route('providers.index');
+            return Redirect::route('providers.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
         }
     }
 
@@ -105,10 +105,10 @@ class ProviderController extends Controller
             }
 
             DB::commit();
-            return Redirect::route('providers.index');
+            return Redirect::route('providers.index')->with(['status' => true, 'message' => 'El proveedor ' . $provider->company . ' fue actualizado correctamente']);
         } catch (Exception $exc) {
             DB::rollBack();
-            return Redirect::route('providers.index');
+            return Redirect::route('providers.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
         }
     }
 

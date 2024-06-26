@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         // $products = DB::table('products')->join('categories', 'categories.id', '=', 'products.category_id')->select('products.*', 'categories.name as category_name')->get();
         $categories = Category::all();
-        $products = Product::with(['category'])->get();
+        $products = Product::with(['category', 'image'])->get();
         return Inertia::render('Products/Index', ['products' => $products, 'categories' => $categories]);
     }
 
@@ -53,13 +53,13 @@ class ProductController extends Controller
                 $name_image = time() . "-" . $image->getClientOriginalName();
                 $request->file('image')->storeAs($image_path, $name_image);
 
-                $product->image()->create(['urlss' => $name_image]);
+                $product->image()->create(['url' => $name_image]);
             }
             DB::commit();
-            return Redirect::route('products.index');
+            return Redirect::route('products.index')->with(['status' => true, 'message' => 'El producto ' . $product->name . ' fue registrado correctamente']);
         } catch (Exception $exc) {
             DB::rollBack();
-            return Redirect::route('products.index');
+            return Redirect::route('products.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
         }
     }
 
@@ -116,10 +116,10 @@ class ProductController extends Controller
                 }
             }
             DB::commit();
-            return Redirect::route('products.index');
+            return Redirect::route('products.index')->with(['status' => true, 'message' => 'El producto ' . $product->name . ' fue actualizado correctamente']);
         } catch (Exception $exc) {
             DB::rollBack();
-            return Redirect::route('products.index');
+            return Redirect::route('products.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
         }
     }
 

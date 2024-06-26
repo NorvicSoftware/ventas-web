@@ -3,6 +3,7 @@ import { usePage, Head } from "@inertiajs/react";
 import { useState } from "react";
 import Form from "./Form";
 import TextInput from "@/Components/TextInput";
+import Show from "./Show";
 
 export default function Index({ auth }) {
 
@@ -15,7 +16,7 @@ export default function Index({ auth }) {
     );
 
     return (
-        <AuthenticatedLayout user={auth.user} header="CATEGORIAS">
+        <AuthenticatedLayout user={auth.user} header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Productos</h2>}>
             <Head title="Categorias" />
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -45,8 +46,9 @@ export default function Index({ auth }) {
                                                 <td className="py-2 px-3 border border-gray-300">{product.quantity}</td>
                                                 <td className="py-2 px-3 border border-gray-300">{product.status}</td>
                                                 <td className="py-2 px-3 border border-gray-300">{product.category.name}</td>
-                                                <td className="py-2 px-3 border border-gray-300">
+                                                <td className="py-2 px-3 border border-gray-300 flex">
                                                     <Form id={product.id} product={product} categories={categories} />
+                                                    <Show product={product}/>
                                                 </td>
                                             </tr>
                                         ))}
