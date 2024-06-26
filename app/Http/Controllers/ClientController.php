@@ -37,6 +37,7 @@ class ClientController extends Controller
         $request->validate([
             'dni' => 'required',
             'full_name' => 'required',
+            'email' => 'nullable|email'
         ]);
         try {
             $client = new Client();
@@ -51,7 +52,7 @@ class ClientController extends Controller
                 Mail::to($client->email)->send(new ClientMail($client));
             }
 
-            return Redirect::route('clients.index')->with(['status' => true, 'message' => 'El cliente fue registrado correctamente']);
+            return Redirect::route('clients.index')->with(['status' => true, 'message' => 'El cliente ' . $client->full_name . ' fue registrado correctamente']);
         } catch (Exception $exc) {
             return Redirect::route('clients.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.' ]);
         }
@@ -83,6 +84,7 @@ class ClientController extends Controller
         $request->validate([
             'dni' => 'required',
             'full_name' => 'required',
+            'email' => 'nullable|email'
         ]);
         try {
             $client = Client::find($id);
@@ -93,9 +95,9 @@ class ClientController extends Controller
             $client->email = $request->email;
             $client->save();
 
-            return Redirect::route('clients.index');
+            return Redirect::route('clients.index')->with(['status' => true, 'message' => 'El cliente ' . $client->full_name . ' fue actualizado correctamente']);
         } catch (Exception $exc) {
-            return Redirect::route('clients.index');
+            return Redirect::route('clients.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.' ]);
         }
     }
 

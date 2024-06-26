@@ -274,5 +274,7 @@ return [
         'company'                  => 'Empresa',
         'contact'                  => 'Contacto',
         'cell_phone'               => 'Celular',
+        'full_name'                => 'Nombre Completo',
+        'sale_price'               => 'Precio de venta',
     ],
 ];

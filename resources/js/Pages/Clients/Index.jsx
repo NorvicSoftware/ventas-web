@@ -12,7 +12,7 @@ export default function Index({ auth }) {
         client.full_name.toLowerCase().includes(searchClient.toLowerCase())
     );
     return (
-        <AuthenticatedLayout user={auth.user} header="CLIENTES">
+        <AuthenticatedLayout user={auth.user} header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Clientes</h2>}>
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -31,21 +31,21 @@ export default function Index({ auth }) {
                             </div>
                             <div>
                                 <table className="min-w-full text-gray-800 dark:text-gray-200">
-                                    <thead className="uppercase bg-gray-500">
+                                    <thead className="uppercase text-white bg-gray-500">
                                         <tr>
-                                            <th className="text-gray-200 py-2">
+                                            <th className="bg-gray-500 py-2">
                                                 DNI
                                             </th>
-                                            <th className="text-gray-200 py-2">
+                                            <th className="bg-gray-500 py-2">
                                                 Nombre
                                             </th>
-                                            <th className="text-gray-200 py-2">
+                                            <th className="bg-gray-500 py-2">
                                                 Celular
                                             </th>
-                                            <th className="text-gray-200 py-2">
+                                            <th className="bg-gray-500 py-2">
                                                 Dirección
                                             </th>
-                                            <th className="text-gray-200 py-2">
+                                            <th className="bg-gray-500 py-2">
                                                 Acciones
                                             </th>
                                         </tr>

@@ -31,7 +31,7 @@ export default function Index({ auth }) {
                             </div>
                             <div>
                                 <table className=" min-w-full">
-                                    <thead className="uppercase bg-gray-500 text-gray-800 dark:text-gray-200">
+                                    <thead className="uppercase text-white dark:text-gray-200">
                                         <tr>
                                             <th className=" bg-gray-500 py-2">Empresa</th>
                                             <th className=" bg-gray-500 py-2">Contacto</th>

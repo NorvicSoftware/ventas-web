@@ -8,6 +8,7 @@ import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import InputError from "@/Components/InputError";
+import { toast } from 'react-toastify';
 
 export default function Form({ id = 0, category = {} }) {
     const [showModal, setShowModal] = useState(false);
@@ -31,27 +32,42 @@ export default function Form({ id = 0, category = {} }) {
 
     const submitCategory = (e) => {
         e.preventDefault();
-        console.log(data);
         if (id === 0) {
             post(route('categories.store'), {
                 onSuccess: (res) => {
                     console.log('OK', res);
+                    if(res.props.flash.status){
+                        toast.success(res.props.flash.message);
+                    }
+                    else {
+                        toast.error(res.props.flash.message);
+                    }
                     closeModal();
                 },
-                onError: (error) => console.log('error: ', error)
+                onError: (error) => {
+                    toast.error('Existen errores en el formulario.');
+                    console.log('error: ', error);
+                }
             })
         }
         else {
-            console.log('update');
             put(route('categories.update', id), {
                 onSuccess: (res) => {
                     console.log('OK', res);
+                    if(res.props.flash.status){
+                        toast.success(res.props.flash.message);
+                    }
+                    else {
+                        toast.error(res.props.flash.message);
+                    }
                     closeModal();
                 },
-                onError: (error) => console.log('error: ', error)
+                onError: (error) => {
+                    toast.error('Existen errores en el formulario.');
+                    console.log('error: ', error)
+                }
             })
         }
-
     }
 
     return (
@@ -72,14 +88,14 @@ export default function Form({ id = 0, category = {} }) {
                     <form>
                         <div>
                             <InputLabel value="Nombre categoria" />
-                            <TextInput className=" block w-full mb-2" type="text" name="name" maxLength={35} value={data.name} onChange={(e) => setData('name', e.target.value)} />
+                            <TextInput className=" block w-full mb-2" type="text" name="name" placeholder="Nombre categoria" maxLength={35} value={data.name} onChange={(e) => setData('name', e.target.value)} />
                             {errors.name && (
                                 <InputError message={errors.name}></InputError>
                             )}
                         </div>
                         <div>
-                            <InputLabel value="Descripción categoria" />
-                            <TextInput className=" block w-full mb-2" type="text" name="description" maxLength={75} value={data.description} onChange={(e) => setData('description', e.target.value)} />
+                            <InputLabel value="Descripción" />
+                            <TextInput className=" block w-full mb-2" type="text" name="description" placeholder="Descripción" maxLength={75} value={data.description} onChange={(e) => setData('description', e.target.value)} />
                         </div>
                         <div className=" space-x-2 flex justify-end">
                             <SecondaryButton type="button" onClick={closeModal}>Cancelar</SecondaryButton>

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class RoleController extends Controller
 {
@@ -36,17 +38,23 @@ class RoleController extends Controller
         $request->validate([
             'name' => 'required',
         ]);
-        $role = new Role();
-        $role->name = $request->name;
-        $role->save();
 
+        DB::beginTransaction();
+        try {
+            $role = new Role();
+            $role->name = $request->name;
+            $role->save();
 
-        if($request->has('permissions')){
-            $role->syncPermissions($request->permissions);
+            if ($request->has('permissions')) {
+                $role->syncPermissions($request->permissions);
+            }
+            DB::commit();
+
+            return Redirect::route('roles.index')->with(['status' => true, 'message' => 'El rol ' . $role->name . ' fue registrado correctamente']);
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('roles.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
         }
-        
-        return Redirect::route('roles.index');
-
     }
 
     /**
@@ -73,19 +81,25 @@ class RoleController extends Controller
         $request->validate([
             'name' => 'required',
         ]);
-        $role = Role::find($id);
-        $role->name = $request->name;
-        $role->save();
+        DB::beginTransaction();
+        try {
+            $role = Role::find($id);
+            $role->name = $request->name;
+            $role->save();
 
 
-        if($request->has('permissions')){
-            $role->syncPermissions($request->permissions);
+            if ($request->has('permissions')) {
+                $role->syncPermissions($request->permissions);
+            } else {
+                $role->syncPermissions([]);
+            }
+            DB::commit();
+
+            return Redirect::route('roles.index')->with(['status' => true, 'message' => 'El rol ' . $role->name . ' fue actualizado correctamente']);
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('roles.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
         }
-        else {
-            $role->syncPermissions([]);
-        }
-        
-        return Redirect::route('roles.index');
     }
 
     /**

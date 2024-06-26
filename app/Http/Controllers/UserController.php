@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class UserController extends Controller
 {
@@ -37,20 +39,26 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required',
-            'password' =>'required|confirmed'
+            'password' => 'required|confirmed'
         ]);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->status = $request->status;
-        $user->save();
-        
-        $user->assignRole($request->role_name);
+        DB::beginTransaction();
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->status = $request->status;
+            $user->save();
 
-        return Redirect::route('users.index');
+            $user->assignRole($request->role_name);
 
+            DB::commit();
+            return Redirect::route('users.index')->with(['status' => true, 'message' => 'El usuario ' . $user->name . ' fue registrado correctamente']);
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('users.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
+        }
     }
 
     /**
@@ -79,14 +87,21 @@ class UserController extends Controller
             'email' => 'required',
         ]);
 
-        $user = User::find($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
-        
-        $user->syncRoles($request->role_name);
+        DB::beginTransaction();
+        try {
+            $user = User::find($id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
 
-        return Redirect::route('users.index');
+            $user->syncRoles($request->role_name);
+
+            DB::commit();
+            return Redirect::route('users.index')->with(['status' => true, 'message' => 'El usuario ' . $user->name . ' fue actualizado correctamente']);
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('users.index')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
+        }
     }
 
     /**

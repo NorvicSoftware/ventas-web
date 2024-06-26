@@ -8,6 +8,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { HiMiniPencilSquare, HiXMark } from "react-icons/hi2";
+import { toast } from 'react-toastify';
 
 export default function Form({ id = 0, provider={} }) {
 
@@ -39,18 +40,36 @@ export default function Form({ id = 0, provider={} }) {
             post(route('providers.store'), {
                 onSuccess: (res) => {
                     console.log('OK', res);
+                    if(res.props.flash.status){
+                        toast.success(res.props.flash.message);
+                    }
+                    else {
+                        toast.error(res.props.flash.message);
+                    }
                     closeModal();
                 },
-                onError: (error) => console.log('error: ', error)
+                onError: (error) => {
+                    toast.error('Existen errores en el formulario.');
+                    console.log('error: ', error);
+                }
             })
         }
         else {
             put(route('providers.update', id), {
                 onSuccess: (res) => {
                     console.log('OK', res);
+                    if(res.props.flash.status){
+                        toast.success(res.props.flash.message);
+                    }
+                    else {
+                        toast.error(res.props.flash.message);
+                    }
                     closeModal();
                 },
-                onError: (error) => console.log('error: ', error)
+                onError: (error) => {
+                    toast.error('Existen errores en el formulario.');
+                    console.log('error: ', error);
+                }
             })
         }
     }
