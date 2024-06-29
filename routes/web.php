@@ -14,6 +14,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Reports\ProductStockController;
+use App\Http\Controllers\Reports\TotalSaleController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -109,6 +111,18 @@ Route::middleware('auth')->group(function () {
         // Route::get('/sales/{id}/edit', 'edit');
         // Route::put('/sales/{id}', 'update');
         // Route::delete('/sales/{id}', 'destroy');
+    });
+
+    Route::controller(ProductStockController::class)->group(function (){
+        Route::get('/reports/stock/products', 'list')->name('reports.stock.products');
+        Route::get('/reports/stock/products/pdf', 'pdf')->name('reports.stock.products.pdf');
+        Route::get('/reports/stock/products/excel', 'excel')->name('reports.stock.products.excel');
+    });
+
+    Route::controller(TotalSaleController::class)->group(function (){
+        Route::get('/reports/sales', 'list')->name('reports.sales');
+        // Route::get('/reports/stock/products/pdf', 'pdf')->name('reports.stock.products.pdf');
+        // Route::get('/reports/stock/products/excel', 'excel')->name('reports.stock.products.excel');
     });
 });
 

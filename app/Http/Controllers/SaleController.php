@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Models\Client;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class SaleController extends Controller
 {
@@ -33,28 +36,37 @@ class SaleController extends Controller
     public function store(Request $request)
     {
 
-        $client = Client::where('dni', '=', $request->dni)->first();
+        DB::beginTransaction();
+        try {
+            $client = Client::where('dni', '=', $request->dni)->first();
 
-        if (!$client) {
-            $client = new Client();
-            $client->dni = $request->dni;
-            $client->full_name = $request->client_name;
-            $client->save();
+            if (!$client) {
+                $client = new Client();
+                $client->dni = $request->dni;
+                $client->full_name = $request->client_name;
+                $client->save();
+            }
+
+            $sale = new Sale();
+            $sale->sale_date = now();
+            $sale->client_id = $client->id;
+            $sale->user_id = auth()->id();
+            $sale->save();
+
+
+            foreach ($request->products as $item) {
+                $sale->products()->attach($item['id'], ['quantity' => $item['quantity'], 'sale_price' => $item['sale_price']]);
+
+                $product = Product::find($item['id']);
+                $product->quantity =  $product->quantity - $item['quantity'];
+                $product->save();
+            }
+            DB::commit();
+            return Redirect::route('dashboard')->with(['status' => true, 'message' => 'La venta fue registrada correctamente']);
+        } catch (Exception $exc) {
+            DB::rollBack();
+            return Redirect::route('dashboard')->with(['status' => false, 'message' => 'Existen errores en el formulario.']);
         }
-
-        $sale = new Sale();
-        $sale->sale_date = now();
-        $sale->client_id = $client->id;
-        $sale->user_id = auth()->id();
-        $sale->save();
-
-
-        foreach($request->products as $product){
-            $sale->products()->attach($product['id'], ['quantity' => $product['quantity'], 'sale_price' => $product['sale_price']]);
-        }
-        
-
-        return Redirect::route('dashboard');
     }
 
     /**
