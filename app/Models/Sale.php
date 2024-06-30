@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Carbon\Carbon;
 
 class Sale extends Model
 {
@@ -15,7 +17,7 @@ class Sale extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)->withPivot('sale_price', 'quantity');
     }
 
     public function client(): BelongsTo
@@ -26,5 +28,13 @@ class Sale extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function saleDate (): Attribute {
+        return Attribute::make(
+            get: function($value){
+                return Carbon::parse($value)->format('d/m/Y H:i');
+            }
+        );
     }
 }
