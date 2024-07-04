@@ -9,6 +9,8 @@ use Inertia\Inertia;
 use App\Models\Category;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use App\Imports\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -19,7 +21,7 @@ class ProductController extends Controller
     {
         // $products = DB::table('products')->join('categories', 'categories.id', '=', 'products.category_id')->select('products.*', 'categories.name as category_name')->get();
         $categories = Category::all();
-        $products = Product::with(['category', 'image'])->get();
+        $products = Product::with(['category', 'image'])->orderBy('name', 'ASC')->get();
         return Inertia::render('Products/Index', ['products' => $products, 'categories' => $categories]);
     }
 
@@ -88,7 +90,7 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|min:3|max:75|unique:products,name,'. $id,
+            'name' => 'required|min:3|max:75|unique:products,name,' . $id,
             'sale_price' => 'required',
             'status' => 'required'
         ]);
@@ -108,10 +110,9 @@ class ProductController extends Controller
                 $name_image = time() . "-" . $image->getClientOriginalName();
                 $request->file('image')->storeAs($image_path, $name_image);
 
-                if($product->image === null){
+                if ($product->image === null) {
                     $product->image()->create(['url' => $name_image]);
-                }
-                else {
+                } else {
                     $product->image()->update(['url' => $name_image]);
                 }
             }
@@ -132,5 +133,51 @@ class ProductController extends Controller
         $product->delete();
 
         return Redirect::route('products.index');
+    }
+
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'excel' => 'required|mimes:xlsx', //csv, xls
+        ]);
+        try {
+            Excel::import(new ProductImport, $request->file('excel'));
+            return Redirect::route('products.index')->with(['status' => true, 'message' => 'Los productos fueron importados correctamente']);
+        } catch (Exception $esc) {
+            return Redirect::route('products.index')->with(['status' => false, 'message' => 'No se completo la carga del archivo excel. ' . $esc->getMessage()]);
+        }
+    }
+
+    public function load(Request $request)
+    {
+
+        try {
+            $products = DB::connection('mysql2')->select('SELECT * FROM productos');
+
+            foreach ($products as $item) {
+                $exit = Product::where('name', '=', $item->nombre)->first();
+                if ($exit) {
+                    $product = Product::find($exit->id);
+                    $product->name = $item->nombre;
+                    $product->sale_price = $item->precio;
+                    $product->quantity = 0;
+                    $product->status = 'Activo';
+                    $product->category_id = 1;
+                    $product->save();
+                } else {
+                    $product = new Product();
+                    $product->name = $item->nombre;
+                    $product->sale_price = $item->precio;
+                    $product->quantity = 0;
+                    $product->status = 'Activo';
+                    $product->category_id = 1;
+                    $product->save();
+                }
+            }
+            return Redirect::route('products.index')->with(['status' => true, 'message' => 'Los productos fueron cargados correctamente']);
+        } catch (Exception $esc) {
+            return Redirect::route('products.index')->with(['status' => false, 'message' => 'No se completo la carga de la base de datos. ' . $esc->getMessage()]);
+        }
     }
 }
