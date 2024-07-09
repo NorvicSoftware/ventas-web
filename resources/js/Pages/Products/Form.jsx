@@ -13,13 +13,13 @@ import { toast } from 'react-toastify';
 
 export default function Form({ id = 0, product = {}, categories = [] }) {
     const [showModal, setShowModal] = useState(false);
-    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', sale_price: '', quantity: '', status: 'Activo', category_id: '', image: ''});
+    const { data, setData, post, put, errors, reset, clearErrors } = useForm({ name: '', sale_price: '', quantity: '', status: 'Activo', category_id: '', image: '' });
 
     const statusProduct = [
-        { id: 'Activo', name: 'Activo'},
-        { id: 'Descontinuado', name: 'Descontinuado'},
+        { id: 'Activo', name: 'Activo' },
+        { id: 'Descontinuado', name: 'Descontinuado' },
     ]
-    
+
     function openModal() {
         setShowModal(true);
         if (id !== 0) {
@@ -45,7 +45,7 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
             post(route('products.store'), {
                 onSuccess: (res) => {
                     console.log('OK', res);
-                    if(res.props.flash.status){
+                    if (res.props.flash.status) {
                         toast.success(res.props.flash.message);
                     }
                     else {
@@ -61,10 +61,10 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
         }
         else {
             post(route('products.update', id), {
-                _method:'PUT', 
+                _method: 'PUT',
                 onSuccess: (res) => {
                     console.log('OK', res);
-                    if(res.props.flash.status){
+                    if (res.props.flash.status) {
                         toast.success(res.props.flash.message);
                     }
                     else {
@@ -81,14 +81,12 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
     }
 
     return (
-        <div>
-            <div>
-                {id === 0 ? (
-                    <CreateButton type='button' onClick={openModal}>Crear nuevo Producto</CreateButton>
-                ) : (
-                    <button onClick={openModal}><HiMiniPencilSquare className="w-6 h-6" /></button>
-                )}
-            </div>
+        <>
+            {id === 0 ? (
+                <CreateButton type='button' onClick={openModal}>Crear nuevo Producto</CreateButton>
+            ) : (
+                <button onClick={openModal}><HiMiniPencilSquare className="w-6 h-6" /></button>
+            )}
             <Modal show={showModal} closeable={true} onClose={closeModal}>
                 <div className="p-4">
                     <div className=" flex justify-between pb-4">
@@ -116,11 +114,11 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
                         </div>
                         <div>
                             <InputLabel value="Estado" />
-                            <TextSelect options={statusProduct} value={data.status} onChange={(e) => setData('status', e.target.value)}/>
+                            <TextSelect options={statusProduct} value={data.status} onChange={(e) => setData('status', e.target.value)} />
                         </div>
                         <div>
                             <InputLabel value="Categoria" />
-                            <TextSelect options={categories} value={data.category_id} onChange={(e) => setData('category_id', e.target.value)}/>
+                            <TextSelect options={categories} value={data.category_id} onChange={(e) => setData('category_id', e.target.value)} />
                         </div>
                         <div>
                             <input type="file" onChange={(e) => setData('image', e.target.files[0])} />
@@ -132,7 +130,7 @@ export default function Form({ id = 0, product = {}, categories = [] }) {
                     </form>
                 </div>
             </Modal>
-        </div>
+        </>
 
     )
 }

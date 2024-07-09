@@ -71,6 +71,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/products/edit/{id}', 'edit');
         Route::post('/products/update/{id}', 'update')->name('products.update');
         Route::delete('/products/delete/{id}', 'destroy');
+        Route::post('/products/import', 'import')->name('products.import');
+        Route::post('/products/load', 'load')->name('products.load');
     });
 
     Route::controller(ProviderController::class)->group(function () {

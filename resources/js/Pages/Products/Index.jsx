@@ -4,6 +4,8 @@ import { useState } from "react";
 import Form from "./Form";
 import TextInput from "@/Components/TextInput";
 import Show from "./Show";
+import Import from "./Import";
+import Load from "./Load";
 
 export default function Index({ auth }) {
 
@@ -24,7 +26,12 @@ export default function Index({ auth }) {
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <div className=" flex justify-between items-center pb-2">
                                 <TextInput isFocused={true} type="text" name="search" placeholder="Buscar..." onChange={(event) => setSearchProduct(event.target.value)} />
-                                <Form categories={categories} />
+                                <div className=" space-x-2">
+                                    <Form categories={categories} />
+                                    <Import />
+                                    <Load />
+                                </div>
+
                             </div>
                             <div>
                                 <table className="min-w-full">
@@ -48,7 +55,7 @@ export default function Index({ auth }) {
                                                 <td className="py-2 px-3 border border-gray-300">{product.category.name}</td>
                                                 <td className="py-2 px-3 border border-gray-300 flex">
                                                     <Form id={product.id} product={product} categories={categories} />
-                                                    <Show product={product}/>
+                                                    <Show product={product} />
                                                 </td>
                                             </tr>
                                         ))}
