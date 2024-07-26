@@ -1,63 +1,143 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Sistema de Ventas para Micromercado
 
-## Acerca del proyecto Ventas Web
+## Tabla de Contenidos
+- [Introducción](#introducción)
+- [Tecnologías](#tecnologías)
+- [Requisitos](#requisitos)
+- [Características](#características)
+- [Instalación](#instalación)
+- [Creditos](#creditos)
+- [Licencia](#licencia)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Introducción
+Este proyecto fue desarrollado en el curso de <a href="https://norvicsoftware.com/curso-de-laravel-react-nextjs/" target="_blank">Laravel, React y NextJS</a>. es un sistema de ventas diseñado para un micromercado. Utiliza Laravel para el backend, React para el frontend y Next.js para consumir una API. El sistema permite la gestión de productos, categorías, clientes, proveedores, ventas, pedidos, usuarios, roles y permisos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Aplicacion DEMO disponible en: <a href="https://ventas-app.norvicsoftware.com/" target="_blank">SISTEMA DE VENTAS</a>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tecnologías
 
-## Tecnologias que actualmente se esta usando en el proyecto
+- **Backend**: Laravel
+- **Frontend**: React
+- **API**: Next.js
+- **Base de Datos**: MySQL o SQLite
 
-![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
-## Laravel Sponsors
+## Requisitos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP >= 8.2
+- Composer
+- Node.js
+- MySQL o SQLite
 
-### Premium Partners
+## Características
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- **Gestión de Usuarios, Roles y Permisos**: Crear, leer, actualizar y eliminar usuarios. Asignar roles y permisos específicos para controlar el acceso a diferentes funcionalidades del sistema.
+- **Gestión de Categorías**: Crear, leer, actualizar y eliminar categorías de productos para organizar el inventario de manera efectiva.
+- **Gestión de Productos**: Crear, leer, actualizar y eliminar productos, incluyendo detalles como código de barras, precio de venta, cantidad, estado e imagen del producto.
+- **Gestión de Clientes**: Registrar y gestionar clientes, incluyendo la información de contacto, enviar mensajes de correo electronico, etc.
+- **Gestión de Proveedores**: Registrar y gestionar proveedores, incluyendo la información de contacto, enviar mensajes de correo electronico, etc.
+- **Gestión de Ventas**: Realizar y gestionar ventas, generando recivo y actualizando el inventario en tiempo real.
+- **Gestión de Compras**: Realizar y gestionar compras de productos a proveedores, actualizando el inventario y registrando las transacciones.
+- **Gestión de Reportes**: Generar reportes detallados sobre ventas, compras, inventario y desempeño del negocio para facilitar la toma de decisiones informadas.
 
-## Contributing
+## Instalación
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Backend (Laravel)
 
-## Code of Conduct
+1. Clona el repositorio:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    ```bash
+    git clone https://github.com/NorvicSoftware/ventas-web.git
+    cd ventas-web
+    ```
 
-## Security Vulnerabilities
+2. Instala las dependencias de PHP:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ```bash
+    composer install
+    ```
+
+3. Crea un archivo `.env`:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+4. Configura el archivo `.env` con tu base de datos y otras configuraciones necesarias.
+
+5. Genera la clave de la aplicación:
+
+    ```bash
+    php artisan key:generate
+    ```
+6. Crear la base de datos SQLite:
+
+    ```bash
+    Crear el archivo database.sqlite en la carpara database
+    ```    
+
+7. Ejecuta las migraciones y seeders:
+
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+
+8. Inicia el servidor:
+
+    ```bash
+    php artisan serve
+    ```
+
+### Frontend (React y Next.js)
+
+
+1. Instala las dependencias de Node.js:
+
+    ```bash
+    npm install
+    ```
+
+2. Inicia el servidor de desarrollo:
+
+    ```bash
+    npm run dev
+    ```
+
+## Creditos
+
+Este proyecto ha sido posible gracias a los siguientes estudiantes, quienes colaboraron en el desarrollo este sistema de ventas para micromercados:
+
+- **Americo Álvarez**
+- **Anuar Rodriguez Medina**
+- **Cristian Barrios**
+- **Enrrique Arrazola**
+- **Eusebio Panozo**
+- **Georgina Wendy Perez**
+- **Gilmar Casano**
+- **Jorge Armando Pico**
+- **Juan Gabriel Llanos**
+- **Juan Manuel Camacho**
+- **Luis Beltran**
+- **Luis Fernando Quispe**
+- **Rodrigo Montaño**
+- **Rolando Cuevas**
+- **Vicente Flores**
+- **Victor Seleme**
+- **Willian Castro**
+- **Zara Zurita**
+- **Ronald Guerra**
+- **Yuri Rene Acurio**
+- **Richard Tejeda**
+- **Edwind Juarez**
+- **Yesmani Fernandez**
+- **Jesús Guevara**
+- **Grober Mendieta**
+- **Carlos Manuel**
+
+
+¡Gracias a todos por su valiosa contribución!
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Este proyecto está licenciado bajo la Licencia MIT.
