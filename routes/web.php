@@ -123,6 +123,7 @@ Route::middleware('auth')->group(function () {
 
     Route::controller(TotalSaleController::class)->group(function (){
         Route::get('/reports/sales', 'list')->name('reports.sales');
+        Route::post('/reports/sales', 'search')->name('reports.sales.search');
         // Route::get('/reports/stock/products/pdf', 'pdf')->name('reports.stock.products.pdf');
         // Route::get('/reports/stock/products/excel', 'excel')->name('reports.stock.products.excel');
     });
